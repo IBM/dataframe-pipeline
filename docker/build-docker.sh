@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ##############################################################################
 # Copyright 2020 IBM Corp. All Rights Reserved.
 #
@@ -14,9 +16,7 @@
 #   limitations under the License.
 ##############################################################################
 
-#!/bin/bash
-
 cp ../requirements.txt .
 cp ~/.kaggle/kaggle.json .
 
-docker build --build-arg ACCESS_TOKEN=${ACCESS_TOKEN} -t dft .
+docker build -t dfp .

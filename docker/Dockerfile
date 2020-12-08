@@ -59,9 +59,9 @@ RUN pip3 install numpy && \
     cd .. && \
     rm -rf onnxruntime
 
-ARG ACCESS_TOKEN
-RUN git clone https://NAKAIKE:${ACCESS_TOKEN}@github.ibm.com/NAKAIKE/dftransform.git
-ADD requirements.txt /git/dftransform
+RUN git clone https://github.com/IBM/dataframe-pipeline.git && \
+    cd dataframe-pipeline && \
+    pip3 install .
 
 RUN mkdir -p /root/.kaggle
 ADD kaggle.json /root/.kaggle/
