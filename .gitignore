@@ -1,0 +1,12 @@
+*.pyc
+*.swp
+*.onnx
+*~
+benchmarks/inputs
+bechmarks/outputs
+dfpipeline.egg-info/
+build/
+dist/
+.DS_Store
+.vscode
+__pycache__

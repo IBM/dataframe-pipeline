@@ -1,77 +1,91 @@
-<!-- This should be the location of the title of the repository, normally the short name -->
-# repo-template
+# Dataframe Pipeline - A framework to build a machine-learning pipeline
 
-<!-- Build Status, is a great thing to have at the top of your repository, it shows that you take your CI/CD as first class citizens -->
-<!-- [![Build Status](https://travis-ci.org/jjasghar/ibm-cloud-cli.svg?branch=master)](https://travis-ci.org/jjasghar/ibm-cloud-cli) -->
+Dataframe pipeline framework allows you to define a machine-learning (ML) pipeline with data transformers and export the pipeline with a trained ML model in the ONNX format.
 
-<!-- Not always needed, but a scope helps the user understand in a short sentance like below, why this repo exists -->
-## Scope
+## How to install via Docker
+The easiest way to use the dataframe pipeline is to build a docker image that includes all of the dependencies. If you want to install your native environment, please follow the steps written in docker/Dockerfile.
 
-The purpose of this project is to provide a template for new open source repositories.
+### 1. Set up kaggle API credentials by following the procedure in [Kaggle API](https://github.com/Kaggle/kaggle-api) 
+This step is needed to download datasets used by our benchmarks. If you do not run the benchmarks, you can skip this step and comment out the lines to copy the kaggle API credentials from docker/Dockerfile. After this step, you should have a json file that includes your API key under ~/.kaggle.
 
-<!-- A more detailed Usage or detailed explaination of the repository here -->
-## Usage
-
-This repository contains some example best practices for open source repositories:
-
-* [LICENSE](LICENSE)
-* [README.md](README.md)
-* [CONTRIBUTING.md](CONTRIBUTING.md)
-* [MAINTAINERS.md](MAINTAINERS.md)
-<!-- A Changelog allows you to track major changes and things that happen, https://github.com/github-changelog-generator/github-changelog-generator can help automate the process -->
-* [CHANGELOG.md](CHANGELOG.md)
-
-> These are optional
-
-<!-- The following are OPTIONAL, but strongly suggested to have in your repository. -->
-* [dco.yml](.github/dco.yml) - This enables DCO bot for you, please take a look https://github.com/probot/dco for more details.
-* [travis.yml](.travis.yml) - This is a example `.travis.yml`, please take a look https://docs.travis-ci.com/user/tutorial/ for more details.
-
-These may be copied into a new or existing project to make it easier for developers not on a project team to collaborate.
-
-<!-- A notes section is useful for anything that isn't covered in the Usage or Scope. Like what we have below. -->
-## Notes
-
-**NOTE: While this boilerplate project uses the Apache 2.0 license, when
-establishing a new repo using this template, please use the
-license that was approved for your project.**
-
-**NOTE: This repository has been configured with the [DCO bot](https://github.com/probot/dco).
-When you set up a new repository that uses the Apache license, you should
-use the DCO to manage contributions. The DCO bot will help enforce that.
-Please contact one of the IBM GH Org stewards.**
-
-<!-- Questions can be useful but optional, this gives you a place to say, "This is how to contact this project maintainers or create PRs -->
-If you have any questions or issues you can create a new [issue here][issues].
-
-Pull requests are very welcome! Make sure your patches are well tested.
-Ideally create a topic branch for every separate change you make. For
-example:
-
-1. Fork the repo
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
-
-## License
-
-All source files must include a Copyright and License header. The SPDX license header is 
-preferred because it can be easily scanned.
-
-If you would like to see the detailed LICENSE click [here](LICENSE).
-
-```text
-#
-# Copyright 2020- IBM Inc. All rights reserved
-# SPDX-License-Identifier: Apache2.0
-#
+### 2. Clone this repository
 ```
-## Authors
+# git clone https://github.com/IBM/dataframe-pipeline.git
+# cd dfpipeline
+```
 
-Optionally, you may include a list of authors, though this is redundant with the built-in
-GitHub list of contributors.
+### 3. Build a docker image
+```
+# cd docker
+# ./build-docker.sh
+```
+Running a docker command `docker images` will show an image named **dfp**. You can use the dataframe pipeline in a docker container by running `docker run -it dfp bash`.
 
-- Author: New OpenSource IBMer <new-opensource-ibmer@ibm.com>
+## How to use
+### 1. Define your pipeline
+```
+import dfpipeline as dfp
 
-[issues]: https://github.com/IBM/repo-template/issues/new
+pipeline = dfp.DataframePipeline(steps=[
+  dfp.ComplementLabelEncoder(inputs=['emaildomain', 'card'], outputs=['emaildomain', 'card']),
+  dfp.FrequencyEncoder(inputs=['emaildomain', 'card'], outputs=['emaildomain_fe', 'card_fe']),
+  dfp.Aggregator(inputs=['Amt'], groupby=['card'], outputs=['Amt_card_mean'], func='mean'),
+])
+```
+
+### 2. Transform a dataframe for training
+```
+import pandas as pd
+
+train_df = pd.read_csv('training.csv')
+train_df = pipeline.fit_transform(df)
+```
+
+### 3. Train a ML model using the transformed dataframe
+```
+import xgboost as xgb
+
+clf = xgb.XGBClassifier(...)
+clf.fit(train_df)
+```
+
+### 4. Convert the trained ML model into an ONNX model
+```
+from onnxmltools.convert import convert_xgboost
+from onnxmltools.convert.common.data_types import FloatTensorType
+
+initial_type = [('dense_input', FloatTensorType([None, len(pipeline.output_columns)]))]
+onnx_ml_model = convert_xgboost(clf, initial_types=initial_type)
+```
+
+### 5. Export a dataframe pipeline with a trained ML model into ONNX
+```
+input_columns_to_onnx = pipeline.export('dense_input', [onnx_ml_model], 'pipeline.onnx')
+```
+
+### 6. Load an ONNX file and run the pipeline
+```
+import onnxrutime as rt
+
+test_df = pd.read_csv('test.csv')
+sess = rt.InferenceSession('pipeline.onnx')
+tensors = dfp.DataframePipeline.convert_to_tensors(test_df, input_columns_to_onnx)
+preds = sess.run(None, tensors)
+```
+
+## Benchmarking
+### 1. Go to the benchmark directory in a docker container
+```
+cd /git/dataframe-pipeline/benchmarks
+```
+
+### 2. Download datasets
+```
+# cd benchmarks
+# ./download_inputs.sh
+```
+
+### 3. Run benchmarks
+```
+# ./run.sh
+```
