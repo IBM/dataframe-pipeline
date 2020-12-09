@@ -19,7 +19,9 @@ This step is needed to download datasets used by our benchmarks. If you do not r
 # cd docker
 # ./build-docker.sh
 ```
-Running a docker command `docker images` will show an image named **dfp**. You can use the dataframe pipeline in a docker container by running `docker run -it dfp bash`.
+If you succeeded to build the image, you can find an image named **dfp** by running a docker command `docker images`. You can use the dataframe pipeline in a docker container by running `docker run -it dfp bash`.
+
+Note that docker/Dockerfile builds the ONNX Runtime which we extended. You can export a ML pipeline in the ONNX format as shown in the following steps. However, for now, current ONNX operators are not enough to represent all of the data transformations available in the dataframe pipeline. Therefore, extended the ONNX Runtime to add some operators which are needed for the data transformations in the dataframe pipeline.
 
 ## How to use
 ### 1. Define your pipeline
@@ -74,6 +76,11 @@ preds = sess.run(None, tensors)
 ```
 
 ## Benchmarking
+We developed benchmarks to evaluate the performance of ML pipelines on Python and the [ONNX Runtime](https://github.com/microsoft/onnxruntime) referring the following use cases.
+ - [XGB Fraud with Magic](https://www.kaggle.com/cdeotte/xgb-fraud-with-magic-0-9600)
+ - [Xgboost_benchmark](https://www.kaggle.com/mpearmain/xgboost-benchmark)
+ - [On Hot Encoding For Categorical Encoding](https://www.kaggle.com/c7934597/on-hot-encoding-for-categorical-encoding)
+
 ### 1. Go to the benchmark directory in a docker container
 ```
 cd /git/dataframe-pipeline/benchmarks
