@@ -70,13 +70,13 @@ class MLPipelineBenchmark:
         preds = np.zeros(len(X))
         if mode == 'onnx-all':
             for i, x in enumerate(X):
-                tensors = dfp.DataFramePipeline.convert_to_tensors(x, self.input_columns_to_onnx_all)
+                tensors = dfp.DataframePipeline.convert_to_tensors(x, self.input_columns_to_onnx_all)
                 outputs = self.onnx_all.run(None, tensors)
                 for j in range(1, len(outputs), 2):
                     preds[i] += outputs[j][:,1]
         elif mode == 'onnx-preprocess':
             for i, x in enumerate(X):
-                tensors = dfp.DataFramePipeline.convert_to_tensors(x, self.input_columns_to_onnx_preprocess)
+                tensors = dfp.DataframePipeline.convert_to_tensors(x, self.input_columns_to_onnx_preprocess)
                 x = self.onnx_preprocess.run(None, tensors)[0]
                 p = 0.0
                 for clf in self.clfs:
@@ -101,13 +101,13 @@ class MLPipelineBenchmark:
     def do_batch_prediction(self, mode, X):
         if mode == 'onnx-all':
             preds = np.zeros(len(X))
-            tensors = dfp.DataFramePipeline.convert_to_tensors(X, self.input_columns_to_onnx_all)
+            tensors = dfp.DataframePipeline.convert_to_tensors(X, self.input_columns_to_onnx_all)
             outputs = self.onnx_all.run(None, tensors)
             for i in range(1, len(outputs), 2):
                 preds += outputs[i][:,1]
         elif mode == 'onnx-preprocess':
             preds = np.zeros(len(X))
-            tensors = dfp.DataFramePipeline.convert_to_tensors(X, self.input_columns_to_onnx_preprocess)
+            tensors = dfp.DataframePipeline.convert_to_tensors(X, self.input_columns_to_onnx_preprocess)
             x = self.onnx_preprocess.run(None, tensors)[0]
             for clf in self.clfs:
                 preds += clf.predict_proba(x)[:,1]

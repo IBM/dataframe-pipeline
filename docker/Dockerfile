@@ -61,6 +61,7 @@ RUN pip3 install numpy && \
 
 RUN git clone https://github.com/IBM/dataframe-pipeline.git && \
     cd dataframe-pipeline && \
+    pip3 install -r requirements.txt && \
     pip3 install .
 
 RUN mkdir -p /root/.kaggle
