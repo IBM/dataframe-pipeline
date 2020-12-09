@@ -23,7 +23,7 @@ sklearn_pandas
 pybind11
 onnx==1.7
 skl2onnx
-xgboost
+xgboost==1.2.1
 networkx
 bytecode
 onnxmltools

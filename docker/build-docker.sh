@@ -16,7 +16,6 @@
 #   limitations under the License.
 ##############################################################################
 
-cp ../requirements.txt .
 cp ~/.kaggle/kaggle.json .
 
-docker build -t dfp .
+docker build --no-cache -t dfp .
