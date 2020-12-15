@@ -1,6 +1,6 @@
 # Dataframe Pipeline - A framework to build a machine-learning pipeline
 
-Dataframe pipeline framework allows you to define a machine-learning (ML) pipeline with data transformers and export the pipeline with a trained ML model in the ONNX format.
+This framework provides APIs called data transformers to represent popular data transformation patterns on a pandas DataFrame object which is a 2D array consisting of rows and labeled columns. You can construct an machine-learning pipeline with the data trasformers, and then export it with a trained ML model into a file in the [ONNX](https://onnx.ai/) format which is a standard to represent a ML model and data transformations.
 
 ## How to install via Docker
 The easiest way to use the dataframe pipeline is to build a docker image that includes all of the dependencies. If you want to install your native environment, please follow the steps written in docker/Dockerfile.
