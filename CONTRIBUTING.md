@@ -2,14 +2,10 @@
 
 This is an open source project, and we appreciate your help!
 
-We use the GitHub issue tracker to discuss new features and non-trivial bugs.
+We use the [GitHub issue tracker](https://github.com/IBM/dataframe-pipeline/issues) to discuss new features and non-trivial bugs.
 
-In addition to the issue tracker, [#journeys on
-Slack](https://dwopen.slack.com) is the best way to get into contact with the
-project's maintainers.
+This project requires that you provide [DCO (Developer Certificate of Origin, Version 1.1)](https://developercertificate.org/) to make any contribution. When you want to make a contribution, please make a commit <font color="crimson">**with ```-s``` option**</font> like ```git commit . -s -m "commit message"```. The ```-s``` option appends a ```Signed-off-by``` line to your commit message like ```Signed-off-by: Random J Developer <random@developer.example.org>```. If all of your commits are signed off by you, your DCO is automatically provided when you make a pull request. This automation is done by using a [DCO bot](https://github.com/probot/dco).
 
-To contribute code, documentation, or tests, please submit a pull request to
-the GitHub repository. Generally, we expect two maintainers to review your pull
-request before it is approved for merging.
+Note: A ```Signed-off-by``` line is needed to **every** commit in a pull request.
 
-Contributions are subject to the [Developer Certificate of Origin, Version 1.1](https://developercertificate.org/) and the [Apache License, Version 2](https://www.apache.org/licenses/LICENSE-2.0.txt).
+Generally, we expect two maintainers to review your pull request before it is approved for merging.
