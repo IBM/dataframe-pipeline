@@ -1,5 +1,8 @@
 # Dataframe Pipeline - A framework to build a machine-learning pipeline
 
+[![License](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![CLA assistant](https://cla-assistant.io/readme/badge/IBM/dataframe-pipeline)](https://cla-assistant.io/IBM/dataframe-pipeline)
+
 This framework provides APIs called data transformers to represent popular data transformation patterns on a pandas DataFrame object which is a 2D array consisting of rows and labeled columns. You can construct an machine-learning pipeline with the data trasformers, and then export it with a trained ML model into a file in the [ONNX](https://onnx.ai/) format which is a standard to represent a ML model and data transformations.
 
 ## How to install via Docker
