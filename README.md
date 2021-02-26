@@ -99,3 +99,6 @@ cd /git/dataframe-pipeline/benchmarks
 ```
 # ./run.sh
 ```
+
+# Contributing
+Follow [our contribution guidelines](https://github.com/IBM/dataframe-pipeline/blob/master/CONTRIBUTING.md).
