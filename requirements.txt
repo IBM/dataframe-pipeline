@@ -21,7 +21,7 @@ scipy
 sklearn
 sklearn_pandas
 pybind11
-onnx==1.7
+onnx==1.13.0
 skl2onnx
 xgboost==1.2.1
 networkx
